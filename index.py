@@ -1,4 +1,4 @@
-pip install BeautifulSoup
+#pip install BeautifulSoup
 
 import streamlit as st
 import BeautifulSoup
