@@ -1,4 +1,7 @@
+pip install BeautifulSoup
+
 import streamlit as st
+import BeautifulSoup
 import requests
 from bs4 import BeautifulSoup
 
