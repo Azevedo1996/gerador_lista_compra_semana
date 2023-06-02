@@ -1,5 +1,3 @@
-!pip install BeautifulSoup
-
 import streamlit as st
 import BeautifulSoup
 import requests
