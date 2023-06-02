@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 
 def extrair_ingredientes(url):
     response = requests.get(url)
@@ -14,6 +15,10 @@ def extrair_ingredientes(url):
         ingredientes.append(ingrediente.text.strip())
     
     return ingredientes
+
+def is_url_valid(url):
+    parsed_url = urlparse(url)
+    return bool(parsed_url.scheme) and bool(parsed_url.netloc)
 
 def main():
     st.title("Gerador de Lista de Compras")
@@ -29,8 +34,11 @@ def main():
     # Gerando a lista de compras
     lista_compras = []
     for url in urls_receitas:
-        ingredientes = extrair_ingredientes(url)
-        lista_compras.extend(ingredientes)
+        if is_url_valid(url):
+            ingredientes = extrair_ingredientes(url)
+            lista_compras.extend(ingredientes)
+        else:
+            st.warning(f"A URL '{url}' é inválida. Verifique e tente novamente.")
 
     # Exibindo a lista de compras
     st.header("Lista de Compras:")
