@@ -27,12 +27,12 @@ st.write("Selecione 7 receitas para a semana e gere a lista de compras de ingred
 # Verifica se é o primeiro acesso à aplicação
 if 'urls' not in st.session_state:
     st.session_state.urls = []
-    st.session_state.urls = st.text_input("Insira a URL do site de receitas:", key='urls')
+    st.session_state.urls = st.text_input("Insira a URL do site de receitas:", value="", key='urls')
 else:
     st.write("URLs salvas:")
     st.write(st.session_state.urls)
     if st.button("Editar URLs"):
-        st.session_state.urls = st.text_input("Insira a URL do site de receitas:", st.session_state.urls, key='urls')
+       st.session_state.urls = st.text_input("Insira a URL do site de receitas:", st.session_state.urls, key='urls')
 
 # Lista de seleção das receitas
 receitas_selecionadas = st.multiselect("Selecione as receitas:", st.session_state.urls, default=st.session_state.urls[:7])
