@@ -34,8 +34,11 @@ def main():
 
     # Exibindo a lista de compras
     st.header("Lista de Compras:")
-    for item in lista_compras:
-        st.write("- " + item)
+    if lista_compras:
+        for item in lista_compras:
+            st.write("- " + item)
+    else:
+        st.write("Nenhuma receita adicionada.")
 
 if __name__ == "__main__":
     main()
