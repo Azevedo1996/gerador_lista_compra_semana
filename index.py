@@ -1,39 +1,41 @@
 import streamlit as st
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
-def get_recipe_data(url):
-    # Realiza a requisição HTTP para obter o conteúdo da página
+def extrair_ingredientes(url):
     response = requests.get(url)
-    # Analisa o conteúdo HTML da página
-    soup = BeautifulSoup(response.content, 'html.parser')
+    soup = BeautifulSoup(response.text, 'html.parser')
     
-    # Extrai os ingredientes da página
     ingredientes = []
-    # Lógica para extrair os ingredientes da página utilizando Beautiful Soup
+    
+    # Extrair ingredientes da página da receita
+    lista_ingredientes = soup.find_all('li', class_='ingredient')
+    for ingrediente in lista_ingredientes:
+        ingredientes.append(ingrediente.text.strip())
     
     return ingredientes
 
 def main():
-    st.title("Gerador de Lista de Compras Semanal")
+    st.title("Gerador de Lista de Compras")
     
-    # Campo de entrada de URL na barra lateral
-    url = st.sidebar.text_input("Insira a URL do site de receitas", value="", key='urls')
-    
-    # Verifica se o campo de URL não está vazio
-    if url:
-        st.write("URL inserida:", url)
-        
-        # Botão para editar a URL
-        if st.sidebar.button("Editar URL"):
-            url = st.sidebar.text_input("Insira a URL do site de receitas", value=url, key='urls')
-        
-        # Lógica para processar a URL e gerar a lista de compras
-        lista_compras = get_recipe_data(url)
-        
-        st.subheader("Lista de Compras:")
-        for item in lista_compras:
-            st.write(item)
+    # Obtendo as URLs das receitas
+    urls_receitas = []
+    num_receitas = st.number_input("Quantas receitas você deseja adicionar à lista de compras?", min_value=1, value=1, step=1)
 
-if __name__ == '__main__':
+    for i in range(num_receitas):
+        url = st.text_input(f"Insira a URL da receita {i+1}:")
+        urls_receitas.append(url)
+
+    # Gerando a lista de compras
+    lista_compras = []
+    for url in urls_receitas:
+        ingredientes = extrair_ingredientes(url)
+        lista_compras.extend(ingredientes)
+
+    # Exibindo a lista de compras
+    st.header("Lista de Compras:")
+    for item in lista_compras:
+        st.write("- " + item)
+
+if __name__ == "__main__":
     main()
